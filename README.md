@@ -2,6 +2,8 @@
 # Prueba-TecnicaPP-extra#
 
 Análisis de Frecuencia de Palabras
+
+
 **TASK**
 - leer un archivo en formato txt proporcionado por el usuario
 - procesar el contenido del archivo para limpiar caracteres especiales
