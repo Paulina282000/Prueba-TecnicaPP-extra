@@ -21,14 +21,13 @@ Análisis de Frecuencia de Palabras
 **Tecnologias Utilizadas**
 
 
--Vite + React:
-Para la creación y construcción de la interfaz de usuario de forma rápida y moderna.
--JavaScript:
-Lenguaje principal para la lógica del programa.
--HTML y CSS:
-Para la estructura y el diseño de la aplicación.
--Web Crypto API:
-Se utiliza para generar un hash SHA-256 y detectar archivos duplicados.
+-Vite + React:Para la creación y construcción de la interfaz de usuario de forma rápida y moderna.
+
+-JavaScript:Lenguaje principal para la lógica del programa.
+
+-HTML y CSS:Para la estructura y el diseño de la aplicación.
+
+-Web Crypto API:Se utiliza para generar un hash SHA-256 y detectar archivos duplicados.
 
 **Medidas de seguridad**
 
