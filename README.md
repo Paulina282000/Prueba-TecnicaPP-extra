@@ -33,5 +33,5 @@ Análisis de Frecuencia de Palabras
 
 
 - validacion de archivos: se verifica que el archivo sea de tipo .txt y que no supere los 2MB
-- sanitizacion del contenido> se limpia el contenido del archivo para eliminar etiquetas HTML, scripts y caracteres especiales.
+- sanitizacion del contenido:se limpia el contenido del archivo para eliminar etiquetas HTML, scripts y caracteres especiales.
 
