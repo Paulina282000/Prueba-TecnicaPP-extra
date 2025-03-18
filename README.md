@@ -11,13 +11,12 @@ Análisis de Frecuencia de Palabras
 - mostrar las 10 palabras mas frecuentes en una tabla.
   
 **Caracteristicas extras**
-
-      - recuandor con las 3 palabras principales con la frecuencia y porcentaje.
-      - validar el tamaño del archivo (maximo 2MB) y evitar cargas duplicadas utilizando un hash SHA-256 del contenido.
-      - verifica que el archivo contenga texto valido y no este vacio.
-      - bloquea archivos qeu superen 2MB o contengan contenido malicioso
-      - elimina caracteres no deseados como =,<,> entre otros
-      - Utiliza un hash SHA-256 para detectar y permitir reanalizar signos de puntuacion y etiquedas
+- recuandor con las 3 palabras principales con la frecuencia y porcentaje.
+- validar el tamaño del archivo (maximo 2MB) y evitar cargas duplicadas utilizando un hash SHA-256 del contenido.
+- verifica que el archivo contenga texto valido y no este vacio.
+- bloquea archivos qeu superen 2MB o contengan contenido malicioso
+- elimina caracteres no deseados como =,<,> entre otros
+- Utiliza un hash SHA-256 para detectar y permitir reanalizar signos de puntuacion y etiquedas
       
 **Tecnologias Utilizadas**
 
