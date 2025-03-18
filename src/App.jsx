@@ -1,26 +1,19 @@
 import React, { useState } from "react";
-import FileUpload from "./components/FileUpload";
+import FileUpload, { clearUploadedFiles } from "./components/FileUpload";
 import WordFrequencyTable from "./components/WordFrequencyTable";
-import TopWords from "./components/TopWords"; // Importar el nuevo componente
+import TopWords from "./components/TopWords";
 import processText from "./utils/processText";
 import "./styles.css"; 
 
 const App = () => {
   const [wordFrequencies, setWordFrequencies] = useState([]);
 
+  //  verifica si el contenido tiene scripts maliciosos
   const isMaliciousContent = (content) => {
     return /<script>|<\/script>|javascript:/i.test(content);
   };
 
-  const generateHash = async (text) => {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(text);
-    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-    return Array.from(new Uint8Array(hashBuffer))
-      .map(byte => byte.toString(16).padStart(2, "0"))
-      .join("");
-  };
-
+  // manejar subida de archivos con validaciones de seguridad
   const handleFileUpload = async (content) => {
     if (isMaliciousContent(content)) {
       alert("⚠️ Error: El archivo contiene código sospechoso.");
@@ -28,17 +21,18 @@ const App = () => {
       return;
     }
 
-    const fileHash = await generateHash(content);
-    console.log(`📄 Archivo cargado (${new Date().toLocaleString()}) | Hash: ${fileHash}`);
-
+    // contenido limpio
     const frequencies = processText(content);
     setWordFrequencies(frequencies);
   };
 
+  // limpiar la pantalla y permitir volver a subir el mismo archivo
   const handleClearScreen = () => {
     setWordFrequencies([]); 
+    clearUploadedFiles(); 
   };
 
+  // Obtener las 3 palabras más frecuentes para el recuadro lateral + extra ver si no lo saco
   const totalWords = wordFrequencies.reduce((sum, [, count]) => sum + count, 0);
   const topWords = wordFrequencies.slice(0, 3).map(([word, count]) => ({
     word,
@@ -48,9 +42,10 @@ const App = () => {
 
   return (
     <div className="container">
-      <h1 className="title">📖  Análisis de Frecuencia de Palabras  📖</h1>
+      <h1 className="title">📖 Análisis de Frecuencia de Palabras 📖</h1>
 
       <div className="content">
+       
         <div className="table-section">
           <FileUpload onFileUpload={handleFileUpload} />
 
@@ -64,6 +59,7 @@ const App = () => {
           )}
         </div>
 
+        
         {wordFrequencies.length > 0 && <TopWords topWords={topWords} />} 
       </div>
     </div>

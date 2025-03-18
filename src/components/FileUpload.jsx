@@ -1,9 +1,9 @@
 import React from "react";
 
-const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
-const uploadedFiles = new Set(); // Para almacenar hashes de archivos ya subidos
+const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB consideracion del tama;o segun el programador, se puede cambiar
+let uploadedFiles = new Set(); //  almacena hashes de archivos ya subidos
 
-// Función para generar un hash SHA-256 del contenido
+// generar un hash SHA-256 del contenido
 const generateHash = async (text) => {
   const encoder = new TextEncoder();
   const data = encoder.encode(text);
@@ -13,21 +13,24 @@ const generateHash = async (text) => {
     .join("");
 };
 
-// Función para manejar el cambio de archivo con validaciones de seguridad
+//  manejar el cambio de archivo con validaciones de seguridad
 const handleFileChange = async (event, onFileUpload) => {
-  const file = event.target.files[0];
+  const fileInput = event.target; // Guardamos la referencia al input
+  const file = fileInput.files[0];
 
   if (!file) return;
 
-  // Verificar que solo se suban archivos de texto
+  // Verifica que solo se suban archivos de texto
   if (file.type !== "text/plain") {
     alert("⚠️ Error: Solo se permiten archivos de texto (.txt).");
+    fileInput.value = ""; // Resetea el input
     return;
   }
 
-  // ✅ Bloquear archivos sospechosamente grandes
+  // Bloquear archivos sospechosamente grandes
   if (file.size > MAX_FILE_SIZE) {
     alert("⚠️ Error: El archivo es demasiado grande (máximo 2MB).");
+    fileInput.value = "";
     return;
   }
 
@@ -35,51 +38,57 @@ const handleFileChange = async (event, onFileUpload) => {
   reader.onload = async (e) => {
     let content = e.target.result.trim();
 
-    // ✅ Bloquear archivos vacíos
+    // Bloquear archivos vacíos
     if (!content || content.length === 0) {
       alert("⚠️ Error: El archivo está vacío.");
+      fileInput.value = "";
       return;
     }
 
-    // ✅ Verificar si el archivo contiene texto
-    // (Puedes ajustar la expresión regular según tus necesidades)
+    // Verificar si el archivo contiene texto válido
     const hasText = /[a-zA-Z0-9]/.test(content);
     if (!hasText) {
       alert("⚠️ Error: El archivo no contiene cadenas de texto válidas.");
+      fileInput.value = "";
       return;
     }
 
-    // ✅ Validar contenido sospechoso antes de procesar
+    // Validar contenido sospechoso antes de procesar
     const isMalicious = /<script[\s\S]*?>[\s\S]*?<\/script>/i.test(content) || /javascript:/i.test(content);
     if (isMalicious) {
       alert("⚠️ Error: El archivo contiene código sospechoso y ha sido bloqueado.");
+      fileInput.value = "";
       return;
     }
 
-    // ✅ Eliminar caracteres sospechosos antes de procesar
+    // Eliminar caracteres sospechosos antes de procesar
     content = content.replace(/[<>]/g, "");
 
-    // ✅ Generar hash SHA-256 del contenido
+    // Generar hash SHA-256 del contenido
     const fileHash = await generateHash(content);
 
-    // ✅ Bloquear archivos duplicados
+    // problema de la duplicacion 
     if (uploadedFiles.has(fileHash)) {
-      alert("⚠️ Error: Este archivo ya ha sido cargado anteriormente.");
-      return;
+      console.warn("El archivo ya se había cargado anteriormente, pero se procederá a reanalizarlo.");
+    } else {
+      
+      uploadedFiles.add(fileHash);
+      console.log(`📄 Archivo cargado | Hash: ${fileHash}`);
     }
 
-    // Registrar archivo como subido
-    uploadedFiles.add(fileHash);
-    console.log(`📄 Archivo cargado | Hash: ${fileHash}`);
-
-    // Llamar a la función `onFileUpload` proporcionada como prop
+  
     onFileUpload(content);
+    fileInput.value = ""; // Resetea el input para permitir volver a cargar el mismo archivo
   };
 
   reader.readAsText(file);
 };
 
-// Componente FileUpload
+//  limpia el historial de archivos subidos
+export const clearUploadedFiles = () => {
+  uploadedFiles.clear();
+};
+
 const FileUpload = ({ onFileUpload }) => {
   return (
     <div className="file-upload">

@@ -1,11 +1,11 @@
 const processText = (text) => {
   if (!text || typeof text !== "string") return [];
 
-  // Evitar caracteres maliciosos y eliminar HTML/Scripts
+  // Evita caracteres maliciosos y eliminar HTML/Scripts
   const cleanedText = text
     .toLowerCase()
-    .replace(/[¿¡!?,.()"':;<>]/g, "") // ✅ Eliminar caracteres sospechosos
-    .replace(/<\/?[^>]+(>|$)/g, ""); // ✅ Remover cualquier intento de HTML/Scripts
+    .replace(/[¿¡!?,.()"':;<>=]/g, "") // elimina los caracteres que especiales
+    .replace(/<\/?[^>]+(>|$)/g, ""); // eliminacualquier intento de HTML/Scripts
 
   // Separar palabras
   const words = cleanedText.split(/\s+/).filter(word => word.trim() !== "");
